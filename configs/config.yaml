@@ -1,0 +1,4 @@
+eureka: "http://localhost:8080/eureka/v2"
+discovery:
+  - http://localhost:8081/
+  - http://localhost:8082/
