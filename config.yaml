@@ -1,4 +1,4 @@
 eureka: "http://192.168.0.11:8080/eureka/v2"
 discovery:
-  - http://192.168.0.11:8081/
+  - http://localhost:8081/
 #  - http://192.168.0.11:8082/

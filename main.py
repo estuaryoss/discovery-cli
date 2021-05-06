@@ -18,8 +18,9 @@ from utils.io_utils import IOUtils
 @click.command()
 @click.option('--token', prompt='token', hide_input=True,
               help='The authentication token that will be sent via \'Token\' header. '
-                   'Use \'None\' if estuary-agent is deployed unsecured')
-@click.option('--protocol', help='The protocol with which the estuary-agent was deployed. Default is http. E.g. https')
+                   'Use \'None\' if estuary-discovery is deployed unsecured')
+@click.option('--protocol', help='The protocol with which the estuary-discovery was deployed. '
+                                 'Default is http. E.g. https')
 @click.option('--cert', help='The certificate with which the estuary-discovery was deployed. E.g. https/cert.pem')
 @click.option('--file', help='The yaml file path on disk. Default is "./config.yaml"')
 def cli(token, protocol, cert, file):

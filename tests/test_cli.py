@@ -16,7 +16,7 @@ class FlaskServerTestCase(unittest.TestCase):
     def test_cli_exit_status_0(self):
         response = CmdUtils.run_cmd_shell_true(f"{self.exec} {self.main_path} "
                                                f"--token=\"{self.token}\" "
-                                               f"--file={self.file}.yml")
+                                               f"--file={self.file}")
 
         print(response)
         self.assertIn(f"{properties.get('version')}", response.get('out'))
