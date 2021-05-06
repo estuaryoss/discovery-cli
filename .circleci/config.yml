@@ -14,6 +14,9 @@ jobs:
           command: pip install -r requirements.txt
           name: "install requirements"
       - run:
+          command: pip install pypiwin32
+          name: "install pypiwin32"
+      - run:
           command: pyinstaller --onefile main.py
           name: "generate cli exe with pyinstaller"
       - run:

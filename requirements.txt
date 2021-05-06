@@ -3,3 +3,4 @@ PyYAML
 py_eureka_client==0.9.8
 requests
 prettytable
+pyinstaller
