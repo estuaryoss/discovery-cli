@@ -24,7 +24,7 @@ jobs:
           name: "download estuary-discovery"
       - run:
           command: Start-Process .\estuary-discovery.exe
-          name: "start estuary-agent"
+          name: "start estuary-discovery"
       - run:
           command: ping -n 5 127.0.0.1
           name: "wait some time"
