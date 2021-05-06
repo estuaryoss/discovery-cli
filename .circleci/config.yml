@@ -17,13 +17,10 @@ jobs:
           command: pyinstaller --onefile main.py
           name: "generate cli exe with pyinstaller"
       - run:
-          command: $ProgressPreference = "SilentlyContinue"; wget https://github.com/estuaryoss/estuary-agent-go/releases/download/4.2.0/estuary-agent-go.exe -O estuary-agent-go.exe
-          name: "download estuary-agent"
+          command: $ProgressPreference = "SilentlyContinue"; wget https://github.com/estuaryoss/estuary-discovery/releases/download/4.2.2/main-linux -O estuary-discovery.exe
+          name: "download estuary-discovery"
       - run:
-          command: $ProgressPreference = "SilentlyContinue"; wget https://github.com/estuaryoss/runcmd/releases/download/1.0.0/runcmd.exe -O runcmd.exe
-          name: "download runcmd"
-      - run:
-          command: Start-Process .\estuary-agent-go.exe
+          command: Start-Process .\estuary-discovery.exe
           name: "start estuary-agent"
       - run:
           command: ping -n 5 127.0.0.1

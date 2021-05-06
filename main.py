@@ -31,7 +31,6 @@ def cli(token, protocol, cert, file):
         "cert": cert if cert is not None else "https/cert.pem"
     }
 
-    service = RestApiService(connection)
     file_path = file if file is not None else "config.yaml"
 
     config_loader = ConfigLoader(yaml.safe_load(IOUtils.read_file(file=file_path, type='r')))
@@ -60,7 +59,7 @@ def cli(token, protocol, cert, file):
     for service in services:
         Discovery.get_discovery_info(service=service)
 
-    click.echo(f"Printing stack stats. Configuration file '{file_path}'")
+    click.echo(f"Printing stack stats. Configuration file '{file_path}'\n")
 
     for service in services:
         stack_viewer = StackViewer(service)
