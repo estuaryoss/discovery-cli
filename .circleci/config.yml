@@ -14,17 +14,17 @@ jobs:
           command: pip install -r requirements.txt
           name: "install requirements"
       - run:
+          command: pip install pypiwin32
+          name: "install pypiwin32"
+      - run:
           command: pyinstaller --onefile main.py
           name: "generate cli exe with pyinstaller"
       - run:
-          command: $ProgressPreference = "SilentlyContinue"; wget https://github.com/estuaryoss/estuary-agent-go/releases/download/4.2.0/estuary-agent-go.exe -O estuary-agent-go.exe
-          name: "download estuary-agent"
+          command: $ProgressPreference = "SilentlyContinue"; wget https://github.com/estuaryoss/estuary-discovery/releases/download/4.2.2/main.exe -O estuary-discovery.exe
+          name: "download estuary-discovery"
       - run:
-          command: $ProgressPreference = "SilentlyContinue"; wget https://github.com/estuaryoss/runcmd/releases/download/1.0.0/runcmd.exe -O runcmd.exe
-          name: "download runcmd"
-      - run:
-          command: Start-Process .\estuary-agent-go.exe
-          name: "start estuary-agent"
+          command: Start-Process .\estuary-discovery.exe
+          name: "start estuary-discovery"
       - run:
           command: ping -n 5 127.0.0.1
           name: "wait some time"

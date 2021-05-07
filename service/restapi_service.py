@@ -48,13 +48,15 @@ class RestApiService:
         response = requests.get(url_format, headers=headers, timeout=5, verify=self.conn.get('cert'))
 
         if not re.search('^20\d$', str(response.status_code)):
-            raise BaseException("Error: Http code: {}. Http body: {}".format(response.status_code, response.text))
+            print("Error: Http code: {}. Http body: {}".format(response.status_code, response.text))
+            return {'description': []}
 
         body = response.json()
 
         # error, the type should be dict
         if isinstance(body['description'], str):
-            raise BaseException(body.get('description'))
+            print(body.get('description'))
+            return {'description': []}
 
         return response.json()
 
@@ -70,13 +72,15 @@ class RestApiService:
 
         # error, server sent non 20x code
         if not re.search('^20\d$', str(response.status_code)):
-            return response.json()
+            print(response.json())
+            return {'description': []}
 
         body = response.json()
 
         # error, the type should be dict
         if isinstance(body['description'], str):
-            raise BaseException(body.get('description'))
+            print(body.get('description'))
+            return {'description': []}
 
         return body
 
@@ -92,13 +96,15 @@ class RestApiService:
 
         # error, server sent non 20x code
         if not re.search('^20\d$', str(response.status_code)):
-            return response.json()
+            print(response.json())
+            return {'description': {}}
 
         body = response.json()
 
         # error, the type should be dict
         if isinstance(body['description'], str):
-            raise BaseException(body.get('description'))
+            print(body.get('description'))
+            return {'description': {}}
 
         return body
 

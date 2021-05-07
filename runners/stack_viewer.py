@@ -10,15 +10,29 @@ class StackViewer:
 
     def view_deployments(self):
         click.echo("<<< deployments >>>")
+        table = PrettyTable()
+        table.field_names = ["id", "container", "logs"]
+        token = self.service.get_connection().get('token')
+        discovery = self.service.get_connection().get('homePageUrl')
         deployments = self.service.get_deployments().get('description')
-        click.echo(deployments)
+        for deployment in deployments:
+            if not isinstance(deployment, dict):
+                break
+            deployment_id = deployment.get('id')
+            containers = deployment.get('containers')
+            ip_port = deployment.get('ip_port')
+            for container in containers:
+                table.add_row([deployment_id, container,
+                               f"curl -i -H Token:{token} -H IpAddr-Port:{ip_port} {discovery}deployers/deployments/logs/{deployment_id}"])
+        click.echo(table.get_string())
 
     def view_active_commands(self):
         click.echo("<<< commands >>>")
-        commands = self.service.get_commands().get('description')
         table = PrettyTable()
-        table.field_names = ["id", "command", "startedat", "finishedat", "duration", "code", "details",
-                             'agent']
+        table.field_names = ["id", "command", "startedat", "finishedat", "duration", "code", 'agent', "details"]
+        token = self.service.get_connection().get('token')
+        discovery = self.service.get_connection().get('homePageUrl')
+        commands = self.service.get_commands().get('description')
         for cmd in commands:
             if cmd.get('commands') is None:
                 break
@@ -29,17 +43,16 @@ class StackViewer:
                      cmd.get('commands').get(command_key).get('startedat'),
                      cmd.get('commands').get(command_key).get('finishedat'),
                      cmd.get('commands').get(command_key).get('duration'),
-                     cmd.get('commands').get(command_key).get('details').get('code'),
-                     f"curl -i -H Token:{self.service.get_connection().get('token')} {cmd.get('homePageUrl')}commanddetached",
-                     cmd.get('ip_port')])
+                     cmd.get('commands').get(command_key).get('details').get('code'), cmd.get('ip_port'),
+                     f"curl -i -H Token:{token} -H IpAddr-Port:{cmd.get('ip_port')} {discovery}agents/commanddetached"])
         click.echo(table.get_string())
 
     def view_eureka_apps(self):
         click.echo("<<< eureka apps >>>")
-        eureka_apps = self.service.get_eureka_apps().get('description')
         table = PrettyTable()
         table.field_names = ["appName", "ipAddr", "port", "securePort", "homePageUrl", 'healthCheckUrl',
                              'statusPageUrl']
+        eureka_apps = self.service.get_eureka_apps().get('description')
         eureka_app_names = dict.keys(eureka_apps)
         for eureka_app_name in eureka_app_names:
             for eureka_app in eureka_apps.get(eureka_app_name):

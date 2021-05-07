@@ -18,8 +18,9 @@ from utils.io_utils import IOUtils
 @click.command()
 @click.option('--token', prompt='token', hide_input=True,
               help='The authentication token that will be sent via \'Token\' header. '
-                   'Use \'None\' if estuary-agent is deployed unsecured')
-@click.option('--protocol', help='The protocol with which the estuary-agent was deployed. Default is http. E.g. https')
+                   'Use \'None\' if estuary-discovery is deployed unsecured')
+@click.option('--protocol', help='The protocol with which the estuary-discovery was deployed. '
+                                 'Default is http. E.g. https')
 @click.option('--cert', help='The certificate with which the estuary-discovery was deployed. E.g. https/cert.pem')
 @click.option('--file', help='The yaml file path on disk. Default is "./config.yaml"')
 def cli(token, protocol, cert, file):
@@ -31,15 +32,18 @@ def cli(token, protocol, cert, file):
         "cert": cert if cert is not None else "https/cert.pem"
     }
 
-    service = RestApiService(connection)
     file_path = file if file is not None else "config.yaml"
 
     config_loader = ConfigLoader(yaml.safe_load(IOUtils.read_file(file=file_path, type='r')))
     config = config_loader.get_config()
     eureka_server = config.get('eureka')
     eureka = Eureka(eureka_server)
-    discovery_apps = eureka.get_type_eureka_apps('discovery')
-    discoveries = [discovery_app.get('homePageUrl') for discovery_app in discovery_apps]
+    try:
+        discovery_apps = eureka.get_type_eureka_apps('discovery')
+        discoveries = [discovery_app.get('homePageUrl') for discovery_app in discovery_apps]
+    except:
+        click.echo("Unable to fetch the 'discovery' apps from Eureka")
+
     if config.get('discovery'):
         discoveries = config.get('discovery')
 
@@ -60,7 +64,7 @@ def cli(token, protocol, cert, file):
     for service in services:
         Discovery.get_discovery_info(service=service)
 
-    click.echo(f"Printing stack stats. Configuration file '{file_path}'")
+    click.echo(f"Printing stack stats. Configuration file '{file_path}'\n")
 
     for service in services:
         stack_viewer = StackViewer(service)
