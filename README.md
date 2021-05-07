@@ -19,13 +19,13 @@ discovery:
 In case both sections are present ```discovery``` section takes precedence.
 
 ## Code quality
-[![Maintainability](https://api.codeclimate.com/v1/badges/315fdb698ad782505c96/maintainability)](https://codeclimate.com/repos/5f8b3da35a75ce3a01000c4c/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/0bfd475fa5174ea20ae7/maintainability)](https://codeclimate.com/github/estuaryoss/discovery-cli/maintainability)
 
 ## Linux status
-[![Build Status](https://travis-ci.com/estuaryoss/estuary-cicd.svg?token=UC9Z5nQSPmb5vK5QLpJh&branch=main)](https://travis-ci.com/estuaryoss/estuary-cicd)
+[![Build Status](https://travis-ci.com/estuaryoss/discovery-cli.svg?branch=main)](https://travis-ci.com/estuaryoss/discovery-cli)
 
 ## Win status
-[![CircleCI](https://circleci.com/gh/estuaryoss/estuary-cicd.svg?style=svg&circle-token=cd4dd66d5683d534ca44f5a64a644720149d8578)](https://circleci.com/gh/estuaryoss/estuary-cicd)
+[![CircleCI](https://circleci.com/gh/estuaryoss/discovery-cli.svg?style=svg&circle-token=cd4dd66d5683d534ca44f5a64a644720149d8578)](https://circleci.com/gh/estuaryoss/discovery-cli)
 
 ## Steps
 -  deploy an eureka server
