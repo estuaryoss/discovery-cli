@@ -38,8 +38,12 @@ def cli(token, protocol, cert, file):
     config = config_loader.get_config()
     eureka_server = config.get('eureka')
     eureka = Eureka(eureka_server)
-    discovery_apps = eureka.get_type_eureka_apps('discovery')
-    discoveries = [discovery_app.get('homePageUrl') for discovery_app in discovery_apps]
+    try:
+        discovery_apps = eureka.get_type_eureka_apps('discovery')
+        discoveries = [discovery_app.get('homePageUrl') for discovery_app in discovery_apps]
+    except:
+        click.echo("Unable to fetch the 'discovery' apps from Eureka")
+
     if config.get('discovery'):
         discoveries = config.get('discovery')
 

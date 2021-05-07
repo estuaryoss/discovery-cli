@@ -10,11 +10,11 @@ class StackViewer:
 
     def view_deployments(self):
         click.echo("<<< deployments >>>")
+        table = PrettyTable()
+        table.field_names = ["id", "container", "logs"]
         token = self.service.get_connection().get('token')
         discovery = self.service.get_connection().get('homePageUrl')
         deployments = self.service.get_deployments().get('description')
-        table = PrettyTable()
-        table.field_names = ["id", "container", "logs"]
         for deployment in deployments:
             if not isinstance(deployment, dict):
                 break
@@ -28,11 +28,11 @@ class StackViewer:
 
     def view_active_commands(self):
         click.echo("<<< commands >>>")
+        table = PrettyTable()
+        table.field_names = ["id", "command", "startedat", "finishedat", "duration", "code", 'agent', "details"]
         token = self.service.get_connection().get('token')
         discovery = self.service.get_connection().get('homePageUrl')
         commands = self.service.get_commands().get('description')
-        table = PrettyTable()
-        table.field_names = ["id", "command", "startedat", "finishedat", "duration", "code", 'agent', "details"]
         for cmd in commands:
             if cmd.get('commands') is None:
                 break
@@ -49,10 +49,10 @@ class StackViewer:
 
     def view_eureka_apps(self):
         click.echo("<<< eureka apps >>>")
-        eureka_apps = self.service.get_eureka_apps().get('description')
         table = PrettyTable()
         table.field_names = ["appName", "ipAddr", "port", "securePort", "homePageUrl", 'healthCheckUrl',
                              'statusPageUrl']
+        eureka_apps = self.service.get_eureka_apps().get('description')
         eureka_app_names = dict.keys(eureka_apps)
         for eureka_app_name in eureka_app_names:
             for eureka_app in eureka_apps.get(eureka_app_name):
