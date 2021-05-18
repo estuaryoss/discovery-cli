@@ -35,7 +35,7 @@ In case both sections are present ```discovery``` section takes precedence.
 
 ## Usage
 ```bash
-python .\main.py --ip=192.168.0.10 --port=8080 --token=None --file="config.yaml"
+python .\main.py --token=None --file="config.yaml"
 ```
 
 ## Params
