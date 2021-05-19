@@ -1,4 +1,6 @@
-eureka: "http://192.168.0.11:8089/eureka/v2"
+eureka:
+  - "http://192.168.0.11:8090/eureka/v2"
+  - "http://192.168.0.11:8091/eureka/v2"
 discovery:
   - http://localhost:8080/
-#  - http://192.168.0.11:8082/
+#  - http://localhost:8083/
