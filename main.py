@@ -25,33 +25,39 @@ from utils.io_utils import IOUtils
 @click.option('--file', help='The yaml file path on disk. Default is "./config.yaml"')
 def cli(token, protocol, cert, file):
     print(f"CLI version: {properties.get('version')}\n")
-    connection = {
-        "homePageUrl": None,
-        "token": token,
-        "protocol": protocol if protocol is not None else "http",
-        "cert": cert if cert is not None else "https/cert.pem"
-    }
 
     file_path = file if file is not None else "config.yaml"
 
     config_loader = ConfigLoader(yaml.safe_load(IOUtils.read_file(file=file_path, type='r')))
     config = config_loader.get_config()
-    eureka_server = config.get('eureka')
-    eureka = Eureka(eureka_server)
+    config_eureka_servers = config.get('eureka')
+
+    eureka_services = []
+    discoveries = []
+
+    if config_eureka_servers is not None:
+        for config_eureka_server in config_eureka_servers:
+            eureka_services.append(Eureka(config_eureka_server))
+
     try:
-        discovery_apps = eureka.get_type_eureka_apps('discovery')
-        discoveries = [discovery_app.get('homePageUrl') for discovery_app in discovery_apps]
+        for eureka_service in eureka_services:
+            temp_discovery_apps = eureka_service.get_type_eureka_apps('discovery')
+            for discovery_app in temp_discovery_apps:
+                discoveries.append(discovery_app.get('homePageUrl'))
     except:
-        click.echo("Unable to fetch the 'discovery' apps from Eureka")
+        click.echo("Unable to fetch the 'discovery' apps from Eureka server list")
 
     if config.get('discovery'):
         discoveries = config.get('discovery')
 
     services = []
     for discovery in discoveries:
-        connection['homePageUrl'] = discovery
-        service = RestApiService(connection)
-        services.append(service)
+        services.append(RestApiService({
+            "homePageUrl": discovery,
+            "token": token,
+            "protocol": protocol if protocol is not None else "http",
+            "cert": cert if cert is not None else "https/cert.pem"
+        }))
 
     # check if can connect
     for service in services:
@@ -67,6 +73,7 @@ def cli(token, protocol, cert, file):
     click.echo(f"Printing stack stats. Configuration file '{file_path}'\n")
 
     for service in services:
+        click.echo(f"\nListing stack on Discovery service: {service.get_connection().get('homePageUrl')}\n")
         stack_viewer = StackViewer(service)
         stack_viewer.view_deployments()
         stack_viewer.view_active_commands()

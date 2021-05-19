@@ -1,1 +1,2 @@
-eureka: "http://localhost:8080/eureka/v2"
+eureka:
+  - "http://localhost:8080/eureka/v2"
