@@ -5,9 +5,11 @@ Discovery CLI will list estuary stack stats in your shell. Alternative to [Estua
 
 # About config.yaml
 There are 2 ways to configure this CLI:
-- inside eureka domain, define the eureka server address and this cli will look over all discovery(ies) to get the stack stats
+- define one/multiple eureka server address and this CLI will look over all discovery(ies) to get the stack stats
 ```yaml
-eureka: "http://localhost:8080/eureka/v2"
+eureka: 
+  - "http://localhost:8080/eureka/v2"
+  - "http://localhost:8081/eureka/v2"
 ```
 - define your discovery(ies) one by one. Make sure it is compatible as ```homePageUrl``` field in eureka server. Example:
 ```yaml
