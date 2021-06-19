@@ -65,7 +65,7 @@ def cli(token, protocol, cert, file):
             service.ping()
         except Exception as e:
             raise BaseException(f"Could not connect to the discovery "
-                                f"{connection.get('homePageUrl')}. Error: {e.__str__()}")
+                                f"{service.get_connection().get('homePageUrl')}. Error: {e.__str__()}")
 
     for service in services:
         Discovery.get_discovery_info(service=service)
