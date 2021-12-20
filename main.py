@@ -16,14 +16,15 @@ from utils.io_utils import IOUtils
 
 
 @click.command()
-@click.option('--token', prompt='token', hide_input=True,
-              help='The authentication token that will be sent via \'Token\' header. '
-                   'Use \'None\' if estuary-discovery is deployed unsecured')
+@click.option('--username', prompt='username',
+              help='The username used for the Basic authentication')
+@click.option('--password', prompt='password', hide_input=True,
+              help='The password used for the Basic authentication')
 @click.option('--protocol', help='The protocol with which the estuary-discovery was deployed. '
                                  'Default is http. E.g. https')
 @click.option('--cert', help='The certificate with which the estuary-discovery was deployed. E.g. https/cert.pem')
 @click.option('--file', help='The yaml file path on disk. Default is "./config.yaml"')
-def cli(token, protocol, cert, file):
+def cli(username, password, protocol, cert, file):
     print(f"CLI version: {properties.get('version')}\n")
 
     file_path = file if file is not None else "config.yaml"
@@ -54,7 +55,8 @@ def cli(token, protocol, cert, file):
     for discovery in discoveries:
         services.append(RestApiService({
             "homePageUrl": discovery,
-            "token": token,
+            "username": username,
+            "password": password,
             "protocol": protocol if protocol is not None else "http",
             "cert": cert if cert is not None else "https/cert.pem"
         }))
@@ -75,9 +77,8 @@ def cli(token, protocol, cert, file):
     for service in services:
         click.echo(f"\nListing stack on Discovery service: {service.get_connection().get('homePageUrl')}\n")
         stack_viewer = StackViewer(service)
-        stack_viewer.view_deployments()
-        stack_viewer.view_active_commands()
         stack_viewer.view_eureka_apps()
+        stack_viewer.view_commands()
 
     exit_code = 0
     click.echo(f"Global exit code: {exit_code}\n")

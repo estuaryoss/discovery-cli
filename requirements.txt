@@ -1,6 +1,6 @@
 click
 PyYAML
-py_eureka_client==0.9.8
+py_eureka_client
 requests
 prettytable
 jproperties

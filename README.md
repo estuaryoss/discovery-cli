@@ -1,7 +1,7 @@
 <h1 align="center"><img src="./docs/images/banner_cli.png" alt="Testing as a service"></h1>  
 
 # Discovery CLI
-Discovery CLI will list estuary stack stats in your shell. Alternative to [Estuary Viewer](https://github.com/estuaryoss/estuary-viewer).
+Discovery CLI will list estuary stack stats in your shell  
 
 # About config.yaml
 There are 2 ways to configure this CLI:
@@ -30,33 +30,31 @@ In case both sections are present ```discovery``` section takes precedence.
 [![CircleCI](https://circleci.com/gh/estuaryoss/discovery-cli.svg?style=svg&circle-token=cd4dd66d5683d534ca44f5a64a644720149d8578)](https://circleci.com/gh/estuaryoss/discovery-cli)
 
 ## Steps
--  deploy an eureka server
+-  deploy an Eureka Server ```docker run -ti -p 8080:8080 estuaryoss/netflix-eureka:1.10.11```  
 -  deploy [estuary-discovery](https://github.com/estuaryoss/estuary-discovery)) on the target machine (metal/VM/Docker/IoT device)
 -  define the yaml configuration 
--  get stats
+-  get Estuary Stack Stats
 
 ## Usage
 ```bash
-python .\main.py --token=None --file="config.yaml"
+python .\main.py --username=admin --password=***** --file="config.yaml"
 ```
 
 ## Params
 ```bash
->python main.py --help
+PS > python .\main.py --help
 Usage: main.py [OPTIONS]
 
 Options:
-  --token TEXT     The authentication token that will be sent via 'Token'
-                   header. Use 'None' if estuary-discovery is deployed unsecured
-
+  --username TEXT  The username used for the Basic authentication
+  --password TEXT  The password used for the Basic authentication
   --protocol TEXT  The protocol with which the estuary-discovery was deployed.
                    Default is http. E.g. https
-
   --cert TEXT      The certificate with which the estuary-discovery was
                    deployed. E.g. https/cert.pem
-
   --file TEXT      The yaml file path on disk. Default is "./config.yaml"
   --help           Show this message and exit.
+
 
 ```
 

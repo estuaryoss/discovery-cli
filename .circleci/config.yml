@@ -20,13 +20,13 @@ jobs:
           command: pyinstaller --onefile main.py
           name: "generate cli exe with pyinstaller"
       - run:
-          command: $ProgressPreference = "SilentlyContinue"; wget https://github.com/estuaryoss/estuary-discovery/releases/download/4.2.2/main.exe -O estuary-discovery.exe
+          command: $ProgressPreference = "SilentlyContinue"; wget https://github.com/estuaryoss/estuary-discovery/releases/download/4.2.4/main-win.exe -O estuary-discovery.exe
           name: "download estuary-discovery"
       - run:
           command: Start-Process .\estuary-discovery.exe
           name: "start estuary-discovery"
       - run:
-          command: ping -n 5 127.0.0.1
+          command: ping -n 10 127.0.0.1
           name: "wait some time"
       - run:
           command: python -m unittest discover tests "test_cli.py"
