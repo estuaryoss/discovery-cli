@@ -19,7 +19,7 @@ jobs:
       script:
         #run cli tests
         - docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_TOKEN"
-        - docker run -d -e HTTP_AUTH_TOKEN=None -p 8080:8080 estuaryoss/discovery:latest
+        - docker run -d -p 8080:8080 estuaryoss/discovery:latest
         - sleep 5
         - chmod +x main.py
         - python3 -m unittest discover tests "test_cli.py"

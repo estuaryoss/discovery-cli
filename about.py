@@ -1,7 +1,7 @@
 properties = {
-    "name": "discovery-cli",
-    "version": "1.0.1",
-    "description": "View estuary stack stats via CLI",
+    "name": "Discovery-CLI",
+    "version": "1.0.2",
+    "description": "View Estuary Stack stats in CLI",
     "author": "Catalin Dinuta",
     "platforms": ["Linux", "Mac", "Windows"],
     "license": "Apache-2.0"

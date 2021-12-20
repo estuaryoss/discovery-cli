@@ -8,43 +8,23 @@ class StackViewer:
         """ Dump stack stats """
         self.service = service
 
-    def view_deployments(self):
-        click.echo("<<< deployments >>>")
-        table = PrettyTable()
-        table.field_names = ["id", "container", "logs"]
-        token = self.service.get_connection().get('token')
-        discovery = self.service.get_connection().get('homePageUrl')
-        deployments = self.service.get_deployments().get('description')
-        for deployment in deployments:
-            if not isinstance(deployment, dict):
-                break
-            deployment_id = deployment.get('id')
-            containers = deployment.get('containers')
-            ip_port = deployment.get('ip_port')
-            for container in containers:
-                table.add_row([deployment_id, container,
-                               f"curl -i -H Token:{token} -H IpAddr-Port:{ip_port} {discovery}deployers/deployments/logs/{deployment_id}"])
-        click.echo(table.get_string())
-
-    def view_active_commands(self):
+    def view_commands(self):
         click.echo("<<< commands >>>")
         table = PrettyTable()
-        table.field_names = ["id", "command", "startedat", "finishedat", "duration", "code", 'agent', "details"]
-        token = self.service.get_connection().get('token')
+        table.field_names = ["id", "command", "startedAt", "finishedAt", "duration", "code", "stderr", "agent", "details"]
+        username = self.service.get_connection().get('username')
         discovery = self.service.get_connection().get('homePageUrl')
-        commands = self.service.get_commands().get('description')
-        for cmd in commands:
-            if cmd.get('commands') is None:
-                break
-            command_keys = list(cmd.get('commands').keys())
-            for command_key in command_keys:
+        commands_response = self.service.get_commands().get('description')
+        for agent_response in commands_response:
+            commands = agent_response.get('description')
+            if not isinstance(agent_response.get('description'), list):
+                commands = []
+            for cmd in commands:
                 table.add_row(
-                    [cmd.get('id'), command_key,
-                     cmd.get('commands').get(command_key).get('startedat'),
-                     cmd.get('commands').get(command_key).get('finishedat'),
-                     cmd.get('commands').get(command_key).get('duration'),
-                     cmd.get('commands').get(command_key).get('details').get('code'), cmd.get('ip_port'),
-                     f"curl -i -H Token:{token} -H IpAddr-Port:{cmd.get('ip_port')} {discovery}agents/commanddetached"])
+                    [cmd.get('id'), cmd.get('command'), cmd.get('startedAt'), cmd.get('finishedAt'),
+                     cmd.get('duration'), cmd.get('code'), cmd.get('err').replace("\r\n", " ").replace("\n", " ")[0:100],
+                     agent_response.get('ip_port'),
+                     f"curl -i -u {username}:****** -H IpAddr-Port:{agent_response.get('ip_port')} {discovery}agents/commands"])
         click.echo(table.get_string())
 
     def view_eureka_apps(self):

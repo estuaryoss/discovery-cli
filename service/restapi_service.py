@@ -1,6 +1,7 @@
 import re
 
 import requests
+from requests.auth import HTTPBasicAuth
 
 
 class RestApiService:
@@ -11,11 +12,11 @@ class RestApiService:
         endpoint = "/about"
         url_format = f"{self.conn.get('homePageUrl')}{endpoint}"
         headers = {
-            "Token": self.conn.get('token'),
             "Content-Type": "application/json"
         }
 
-        response = requests.get(url_format, headers=headers, timeout=5, verify=self.conn.get('cert'))
+        response = requests.get(url_format, headers=headers, timeout=5, verify=self.conn.get('cert'),
+                                auth=HTTPBasicAuth(self.conn.get('username'), self.conn.get('password')))
 
         if response.status_code != 200:
             raise BaseException("Error: Http code: {}. Http body: {}".format(response.status_code, response.text))
@@ -26,49 +27,26 @@ class RestApiService:
         endpoint = "/ping"
         url_format = f"{self.conn.get('homePageUrl')}{endpoint}"
         headers = {
-            "Token": self.conn.get('token'),
             "Content-Type": "application/json"
         }
 
-        response = requests.get(url_format, headers=headers, timeout=5, verify=self.conn.get('cert'))
+        response = requests.get(url_format, headers=headers, timeout=5, verify=self.conn.get('cert'),
+                                auth=HTTPBasicAuth(self.conn.get('username'), self.conn.get('password')))
 
         if response.status_code != 200:
             raise BaseException("Error: Http code: {}. Http body: {}".format(response.status_code, response.text))
 
         return response.json()
 
-    def get_deployments(self):
-        endpoint = "/deployments"
-        url_format = f"{self.conn.get('homePageUrl')}{endpoint}"
-        headers = {
-            "Token": self.conn.get('token'),
-            "Content-Type": "application/json"
-        }
-
-        response = requests.get(url_format, headers=headers, timeout=5, verify=self.conn.get('cert'))
-
-        if not re.search('^20\d$', str(response.status_code)):
-            print("Error: Http code: {}. Http body: {}".format(response.status_code, response.text))
-            return {'description': []}
-
-        body = response.json()
-
-        # error, the type should be dict
-        if isinstance(body['description'], str):
-            print(body.get('description'))
-            return {'description': []}
-
-        return response.json()
-
     def get_commands(self):
-        endpoint = "/commandsdetached"
+        endpoint = "/agents/commands"
         url_format = f"{self.conn.get('homePageUrl')}{endpoint}"
         headers = {
-            "Token": self.conn.get('token'),
             "Content-Type": "application/json"
         }
 
-        response = requests.get(url_format, headers=headers, timeout=5, verify=self.conn.get('cert'))
+        response = requests.get(url_format, headers=headers, timeout=5, verify=self.conn.get('cert'),
+                                auth=HTTPBasicAuth(self.conn.get('username'), self.conn.get('password')))
 
         # error, server sent non 20x code
         if not re.search('^20\d$', str(response.status_code)):
@@ -88,11 +66,11 @@ class RestApiService:
         endpoint = "/eurekaapps"
         url_format = f"{self.conn.get('homePageUrl')}{endpoint}"
         headers = {
-            "Token": self.conn.get('token'),
             "Content-Type": "application/json"
         }
 
-        response = requests.get(url_format, headers=headers, timeout=5, verify=self.conn.get('cert'))
+        response = requests.get(url_format, headers=headers, timeout=5, verify=self.conn.get('cert'),
+                                auth=HTTPBasicAuth(self.conn.get('username'), self.conn.get('password')))
 
         # error, server sent non 20x code
         if not re.search('^20\d$', str(response.status_code)):
