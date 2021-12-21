@@ -63,7 +63,7 @@ class RestApiService:
         return body
 
     def get_eureka_apps(self):
-        endpoint = "/eurekaapps"
+        endpoint = "/eureka/apps"
         url_format = f"{self.conn.get('homePageUrl')}{endpoint}"
         headers = {
             "Content-Type": "application/json"
